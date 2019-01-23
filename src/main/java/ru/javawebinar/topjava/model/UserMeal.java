@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.model;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class UserMeal {
     private final LocalDateTime dateTime;
@@ -25,5 +26,29 @@ public class UserMeal {
 
     public int getCalories() {
         return calories;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserMeal userMeal = (UserMeal) o;
+        return calories == userMeal.calories &&
+                Objects.equals(dateTime, userMeal.dateTime) &&
+                Objects.equals(description, userMeal.description);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(dateTime, description, calories);
+    }
+
+    @Override
+    public String toString() {
+        return "UserMeal{" +
+                "dateTime=" + dateTime +
+                ", description='" + description + '\'' +
+                ", calories=" + calories +
+                '}';
     }
 }
