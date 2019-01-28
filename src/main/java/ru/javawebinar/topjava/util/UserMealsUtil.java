@@ -9,16 +9,12 @@ import java.time.LocalTime;
 import java.time.Month;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
-
-import static java.util.stream.Collector.Characteristics.CONCURRENT;
 
 public class UserMealsUtil {
     public static void main(String[] args) {
