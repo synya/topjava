@@ -9,6 +9,8 @@ import java.util.List;
 
 public class MealTestData {
 
+    public static final int CALORIES_PER_DAY_LIMIT = 2000;
+
     public static final List<Meal> LIST = Arrays.asList(
             new Meal(LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500),
             new Meal(LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед", 1000),

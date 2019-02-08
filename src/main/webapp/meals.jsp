@@ -10,18 +10,27 @@
 <h2>Список еды:</h2>
 <table border="1" cellpadding="8" cellspacing="0">
     <tr>
-        <th>Время</th>
+        <th>UUID</th>
+        <th>Дата/время</th>
         <th>Описание</th>
         <th>Калории</th>
+        <th></th>
+        <th></th>
     </tr>
     <c:forEach items="${mealsTo}" var="mealTo">
         <jsp:useBean id="mealTo" type="ru.javawebinar.topjava.model.MealTo"/>
         <tr bgcolor="<c:out value="${mealTo.excess ? 'Red' : 'Green'}" />">
+            <td>${mealTo.uuid}</td>
             <td>${TimeUtil.format(mealTo.dateTime)}</td>
             <td>${mealTo.description}</td>
             <td>${mealTo.calories}</td>
+            <td><a href="meals?uuid=${mealTo.uuid}&action=edit">редактировать</a></td>
+            <td><a href="meals?uuid=${mealTo.uuid}&action=delete">удалить</a></td>
         </tr>
     </c:forEach>
 </table>
+<a href="meals?action=add">добавить новую запись</a>
+<br>
+<a href="meals?action=clear">удалить всё!</a>
 </body>
 </html>
