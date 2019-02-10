@@ -16,6 +16,4 @@ public interface MealStorage {
 
     void delete(Integer uuid);
 
-    void clear();
-
 }

@@ -5,6 +5,7 @@ import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.storage.MapMealStorage;
 import ru.javawebinar.topjava.storage.MealStorage;
 import ru.javawebinar.topjava.util.MealTestData;
+import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.util.TimeUtil;
 
 import javax.servlet.ServletConfig;
@@ -46,20 +47,10 @@ public class MealServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String uuid = request.getParameter("uuid");
         String action = request.getParameter("action");
-        if (action == null) {
-            request.setAttribute("mealsTo", getFilteredWithExcess(mealStorage.getAll(), LocalTime.MIN, LocalTime.MAX,
-                    MealTestData.CALORIES_PER_DAY_LIMIT));
-            request.getRequestDispatcher("/meals.jsp").forward(request, response);
-            return;
-        }
-        switch (action) {
+        switch (String.valueOf(action)) {
             case "add":
-                request.setAttribute("meal", Meal.EMPTY);
+                request.setAttribute("meal", MealsUtil.EMPTY);
                 request.getRequestDispatcher("/editmeal.jsp").forward(request, response);
-                break;
-            case "clear":
-                mealStorage.clear();
-                response.sendRedirect("meals");
                 break;
             case "edit":
                 request.setAttribute("meal", mealStorage.get(Integer.valueOf(uuid)));
@@ -68,9 +59,12 @@ public class MealServlet extends HttpServlet {
             case "delete":
                 mealStorage.delete(Integer.valueOf(uuid));
                 response.sendRedirect("meals");
-                return;
+                break;
             default:
-                throw new IllegalArgumentException("action " + action + " is illegal");
+                request.setAttribute("mealsTo", getFilteredWithExcess(mealStorage.getAll(), LocalTime.MIN, LocalTime.MAX,
+                        MealTestData.CALORIES_PER_DAY_LIMIT));
+                request.getRequestDispatcher("/meals.jsp").forward(request, response);
+                break;
         }
     }
 }

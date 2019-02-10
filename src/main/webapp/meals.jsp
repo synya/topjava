@@ -30,7 +30,5 @@
     </c:forEach>
 </table>
 <a href="meals?action=add">добавить новую запись</a>
-<br>
-<a href="meals?action=clear">удалить всё!</a>
 </body>
 </html>

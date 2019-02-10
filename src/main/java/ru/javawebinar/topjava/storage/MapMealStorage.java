@@ -20,9 +20,6 @@ public class MapMealStorage implements MealStorage {
     @Override
     public Meal get(Integer uuid) {
         Objects.requireNonNull(uuid, "uuid must not be null");
-        if (!storage.containsKey(uuid)) {
-            throw new RuntimeException("cannot find meal with uuid=" + uuid);
-        }
         log.debug("got meal with uuid=" + uuid);
         return storage.get(uuid);
     }
@@ -38,9 +35,6 @@ public class MapMealStorage implements MealStorage {
     @Override
     public void update(Meal meal) {
         Objects.requireNonNull(meal, "meal must not be null");
-        if (!storage.containsKey(meal.getUuid())) {
-            throw new RuntimeException("cannot find meal with uuid=" + meal.getUuid());
-        }
         log.debug("updated meal with uuid=" + meal.getUuid());
         storage.put(meal.getUuid(), meal);
     }
@@ -53,18 +47,8 @@ public class MapMealStorage implements MealStorage {
     @Override
     public void delete(Integer uuid) {
         Objects.requireNonNull(uuid, "uuid must not be null");
-        if (!storage.containsKey(uuid)) {
-            throw new RuntimeException("cannot find meal with uuid=" + uuid);
-        }
         log.debug("deleted meal with uuid=" + uuid);
         storage.remove(uuid);
-    }
-
-    @Override
-    public void clear() {
-        log.debug("deleted all meals");
-        storage.clear();
-        counter.set(0);
     }
 
 }
