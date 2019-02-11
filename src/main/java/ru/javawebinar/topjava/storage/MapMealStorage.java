@@ -18,25 +18,25 @@ public class MapMealStorage implements MealStorage {
     private AtomicInteger counter = new AtomicInteger();
 
     @Override
-    public Meal get(Integer uuid) {
-        Objects.requireNonNull(uuid, "uuid must not be null");
-        log.debug("got meal with uuid=" + uuid);
-        return storage.get(uuid);
+    public Meal get(Integer id) {
+        Objects.requireNonNull(id, "id must not be null");
+        log.debug("got meal with id=" + id);
+        return storage.get(id);
     }
 
     @Override
     public void save(Meal meal) {
         Objects.requireNonNull(meal, "meal must not be null");
-        meal.setUuid(counter.incrementAndGet());
-        storage.put(meal.getUuid(), meal);
-        log.debug("saved meal with uuid=" + meal.getUuid());
+        meal.setId(counter.incrementAndGet());
+        storage.put(meal.getId(), meal);
+        log.debug("saved meal with id=" + meal.getId());
     }
 
     @Override
     public void update(Meal meal) {
         Objects.requireNonNull(meal, "meal must not be null");
-        log.debug("updated meal with uuid=" + meal.getUuid());
-        storage.put(meal.getUuid(), meal);
+        log.debug("updated meal with id=" + meal.getId());
+        storage.put(meal.getId(), meal);
     }
 
     @Override
@@ -45,10 +45,10 @@ public class MapMealStorage implements MealStorage {
     }
 
     @Override
-    public void delete(Integer uuid) {
-        Objects.requireNonNull(uuid, "uuid must not be null");
-        log.debug("deleted meal with uuid=" + uuid);
-        storage.remove(uuid);
+    public void delete(Integer id) {
+        Objects.requireNonNull(id, "id must not be null");
+        log.debug("deleted meal with id=" + id);
+        storage.remove(id);
     }
 
 }

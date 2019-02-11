@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface MealStorage {
 
-    Meal get(Integer uuid);
+    Meal get(Integer id);
 
     void save(Meal meal);
 
@@ -14,6 +14,6 @@ public interface MealStorage {
 
     List<Meal> getAll();
 
-    void delete(Integer uuid);
+    void delete(Integer id);
 
 }

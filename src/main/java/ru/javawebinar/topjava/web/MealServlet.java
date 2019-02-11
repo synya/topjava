@@ -1,6 +1,5 @@
 package ru.javawebinar.topjava.web;
 
-import org.slf4j.Logger;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.storage.MapMealStorage;
 import ru.javawebinar.topjava.storage.MealStorage;
@@ -34,30 +33,29 @@ public class MealServlet extends HttpServlet {
         Meal meal = new Meal(TimeUtil.parse(request.getParameter("dateTime")),
                 request.getParameter("description"),
                 Integer.valueOf(request.getParameter("calories")));
-        String uuid = request.getParameter("uuid");
-        if ((uuid == null) || (uuid.length() == 0)) {
+        String id = request.getParameter("id");
+        if ((id == null) || (id.length() == 0)) {
             mealStorage.save(meal);
         } else {
-            meal.setUuid(Integer.valueOf(uuid));
+            meal.setId(Integer.valueOf(id));
             mealStorage.update(meal);
         }
         response.sendRedirect("meals");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String uuid = request.getParameter("uuid");
-        String action = request.getParameter("action");
-        switch (String.valueOf(action)) {
+        String id = request.getParameter("id");
+        switch (String.valueOf(request.getParameter("action"))) {
             case "add":
                 request.setAttribute("meal", MealsUtil.EMPTY);
                 request.getRequestDispatcher("/editmeal.jsp").forward(request, response);
                 break;
             case "edit":
-                request.setAttribute("meal", mealStorage.get(Integer.valueOf(uuid)));
+                request.setAttribute("meal", mealStorage.get(Integer.valueOf(id)));
                 request.getRequestDispatcher("/editmeal.jsp").forward(request, response);
                 break;
             case "delete":
-                mealStorage.delete(Integer.valueOf(uuid));
+                mealStorage.delete(Integer.valueOf(id));
                 response.sendRedirect("meals");
                 break;
             default:

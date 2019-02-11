@@ -9,7 +9,7 @@
 <body>
 <h3><a href="index.html">Home</a></h3>
 <form method="post" action="meals" enctype="application/x-www-form-urlencoded">
-    <input type="hidden" name="uuid" value="${meal.uuid}">
+    <input type="hidden" name="id" value="${meal.id}">
     <input type="text" name="dateTime" size=20 value="${TimeUtil.format(meal.dateTime)}" pattern="[0-9]{2}.[0-9]{2}.[0-9]{2} [0-9]{2}:[0-9]{2}">
     <input type="text" name="description" size=20 value="${meal.description}">
     <input type="number" name="calories" size=20 value="${meal.calories}" min="0">
