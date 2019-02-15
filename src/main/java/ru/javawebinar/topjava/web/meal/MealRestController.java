@@ -34,7 +34,7 @@ public class MealRestController {
                 MealsUtil.DEFAULT_CALORIES_PER_DAY);
     }
 
-    Meal get(int id) throws NotFoundException {
+    public Meal get(int id) throws NotFoundException {
         log.info("get {}", id);
         return service.get(id, SecurityUtil.authUserId());
     }
