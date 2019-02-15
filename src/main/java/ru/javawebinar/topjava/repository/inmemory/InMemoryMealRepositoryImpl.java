@@ -2,8 +2,11 @@ package ru.javawebinar.topjava.repository.inmemory;
 
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
+import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -50,6 +53,14 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     public Collection<Meal> getAll(int userId) {
         return repository.values().stream()
                 .filter(m -> m.getUserId() == userId)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Collection<Meal> getAll(int userId, LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
+        return getAll(userId).stream()
+                .filter(m -> DateTimeUtil.isBetweenDate(m.getDate(), startDate, endDate))
+                .filter(m -> DateTimeUtil.isBetweenTime(m.getTime(), startTime, endTime))
                 .collect(Collectors.toList());
     }
 }
