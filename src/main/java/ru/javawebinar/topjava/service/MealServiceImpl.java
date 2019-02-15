@@ -40,11 +40,6 @@ public class MealServiceImpl implements MealService {
     }
 
     @Override
-    public List<Meal> getAll(int userId) {
-        return new ArrayList<>(repository.getAll(userId));
-    }
-
-    @Override
     public List<Meal> getAll(int userId, LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
         return new ArrayList<>(repository.getAll(userId, startDate, endDate, startTime, endTime));
     }
