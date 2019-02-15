@@ -60,8 +60,8 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     public Collection<Meal> getAll(int userId, LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
         return repository.values().stream()
                 .filter(m -> m.getUserId() == userId)
-                .filter(m -> DateTimeUtil.isBetweenDate(m.getDate(), startDate, endDate))
-                .filter(m -> DateTimeUtil.isBetweenTime(m.getTime(), startTime, endTime))
+                .filter(m -> DateTimeUtil.isBetween(m.getDate(), startDate, endDate))
+                .filter(m -> DateTimeUtil.isBetween(m.getTime(), startTime, endTime))
                 .sorted(DATE_TIME_COMPARATOR)
                 .collect(Collectors.toList());
     }
