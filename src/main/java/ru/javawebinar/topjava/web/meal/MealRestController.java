@@ -30,18 +30,18 @@ public class MealRestController {
     }
 
     public List<MealTo> getAll(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
-        return MealsUtil.getWithExcess(service.getAll(SecurityUtil.authUserId(), startDate, endDate, startTime, endTime),
+        return MealsUtil.getWithExcess(service.getAll(SecurityUtil.getAuthUserId(), startDate, endDate, startTime, endTime),
                 MealsUtil.DEFAULT_CALORIES_PER_DAY);
     }
 
     public Meal get(int id) throws NotFoundException {
         log.info("get {}", id);
-        return service.get(id, SecurityUtil.authUserId());
+        return service.get(id, SecurityUtil.getAuthUserId());
     }
 
     public void delete(int id) throws NotFoundException {
         log.info("delete {}", id);
-        service.delete(id, SecurityUtil.authUserId());
+        service.delete(id, SecurityUtil.getAuthUserId());
     }
 
     public Meal create(Meal meal) {
