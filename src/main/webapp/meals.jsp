@@ -20,6 +20,13 @@
 <section>
     <h3><a href="index.html">Home</a></h3>
     <h2>Meals</h2>
+    <form method="get" action="meals">
+        От даты: <input type="text" name="startDate" size=20" pattern="[0-9]{2}.[0-9]{2}.[0-9]{4}">
+        До даты: <input type="text" name="endDate" size=20" pattern="[0-9]{2}.[0-9]{2}.[0-9]{4}">
+        От времени: <input type="text" name="startTime" size=20" pattern="[0-9]{2}:[0-9]{2}">
+        До времени: <input type="text" name="endTime" size=20" pattern="[0-9]{2}:[0-9]{2}">
+        <button type="submit">Показать</button>
+    </form>
     <a href="meals?action=create">Add Meal</a>
     <hr/>
     <table border="1" cellpadding="8" cellspacing="0">

@@ -18,6 +18,12 @@ import static java.util.stream.Collectors.toList;
 
 public class MealsUtil {
     public static final List<Meal> MEALS = Arrays.asList(
+            new Meal(1, LocalDateTime.of(2015, Month.MAY, 28, 10, 0), "Завтрак", 501),
+            new Meal(1, LocalDateTime.of(2015, Month.MAY, 28, 13, 0), "Обед", 1000),
+            new Meal(1, LocalDateTime.of(2015, Month.MAY, 28, 20, 0), "Ужин", 500),
+            new Meal(1, LocalDateTime.of(2015, Month.MAY, 29, 10, 0), "Завтрак", 500),
+            new Meal(1, LocalDateTime.of(2015, Month.MAY, 29, 13, 0), "Обед", 1000),
+            new Meal(1, LocalDateTime.of(2015, Month.MAY, 29, 20, 0), "Ужин", 500),
             new Meal(1, LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500),
             new Meal(1, LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед", 1000),
             new Meal(1, LocalDateTime.of(2015, Month.MAY, 30, 20, 0), "Ужин", 500),
