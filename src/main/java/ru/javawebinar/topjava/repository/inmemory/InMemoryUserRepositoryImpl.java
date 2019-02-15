@@ -14,7 +14,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Repository
 public class InMemoryUserRepositoryImpl implements UserRepository {
     private static final Comparator<User> NAME_THEN_ID_COMPARATOR =
-            Comparator.comparing(User::getName).thenComparing(User::getId);
+            Comparator.comparing(User::getName)
+                    .thenComparing(User::getId);
     private static final Logger log = LoggerFactory.getLogger(InMemoryUserRepositoryImpl.class);
     private Map<Integer, User> repository = new ConcurrentHashMap<>();
     private AtomicInteger counter = new AtomicInteger(0);

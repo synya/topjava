@@ -9,6 +9,7 @@ import ru.javawebinar.topjava.util.MealsUtil;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -16,6 +17,10 @@ import java.util.stream.Collectors;
 
 @Repository
 public class InMemoryMealRepositoryImpl implements MealRepository {
+    private static final Comparator<Meal> DATE_TIME_COMPARATOR =
+            Comparator.comparing(Meal::getDate)
+                    .thenComparing(Meal::getTime)
+                    .reversed();
     private Map<Integer, Meal> repository = new ConcurrentHashMap<>();
     private AtomicInteger counter = new AtomicInteger(0);
 
@@ -63,6 +68,7 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
         return getAll(userId).stream()
                 .filter(m -> DateTimeUtil.isBetweenDate(m.getDate(), startDate, endDate))
                 .filter(m -> DateTimeUtil.isBetweenTime(m.getTime(), startTime, endTime))
+                .sorted(DATE_TIME_COMPARATOR)
                 .collect(Collectors.toList());
     }
 }
