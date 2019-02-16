@@ -11,10 +11,6 @@ public class DateTimeUtil {
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
 
-    public static <T extends Comparable<T>> boolean isBetween(T dateTime, T startDateTime, T endDateTime) {
-        return dateTime.compareTo(startDateTime) >= 0 && dateTime.compareTo(endDateTime) <= 0;
-    }
-
     public static String toString(LocalDateTime ldt) {
         return ldt == null ? "" : ldt.format(DATE_TIME_FORMATTER);
     }
