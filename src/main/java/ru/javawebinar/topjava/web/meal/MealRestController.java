@@ -27,11 +27,12 @@ public class MealRestController {
     private MealService service;
 
     public List<MealTo> getAll() {
-        log.info("getAllFiltered");
+        log.info("getAll");
         return MealsUtil.getWithExcess(service.getAll(SecurityUtil.getAuthUserId()), SecurityUtil.authUserCaloriesPerDay());
     }
 
     public List<MealTo> getAllFiltered(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
+        log.info("getAllFiltered");
         startDate = (startDate == null) ? LocalDate.MIN : startDate;
         endDate = (endDate == null) ? LocalDate.MAX : endDate;
         startTime = (startTime == null) ? LocalTime.MIN : startTime;
