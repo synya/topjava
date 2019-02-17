@@ -78,12 +78,17 @@ public class MealServlet extends HttpServlet {
                 break;
             case "all":
             default:
-                log.info("getAll");
-                request.setAttribute("meals", mealRestController.getAll(
-                        DateTimeUtil.parseDate(request.getParameter("startDate"), LocalDate.MIN),
-                        DateTimeUtil.parseDate(request.getParameter("endDate"), LocalDate.MAX),
-                        DateTimeUtil.parseTime(request.getParameter("startTime"), LocalTime.MIN),
-                        DateTimeUtil.parseTime(request.getParameter("endTime"), LocalTime.MAX)));
+                LocalDate startDate = DateTimeUtil.parseDate(request.getParameter("startDate"));
+                LocalDate endDate = DateTimeUtil.parseDate(request.getParameter("endDate"));
+                LocalTime startTime = DateTimeUtil.parseTime(request.getParameter("startTime"));
+                LocalTime endTime = DateTimeUtil.parseTime(request.getParameter("endTime"));
+                if ((startDate == null) && (endDate == null) && (startTime == null) && (endTime == null)) {
+                    log.info("getAll");
+                    request.setAttribute("meals", mealRestController.getAll());
+                } else {
+                    log.info("getAllFiltered");
+                    request.setAttribute("meals", mealRestController.getAllFiltered(startDate, endDate, startTime, endTime));
+                }
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;
         }

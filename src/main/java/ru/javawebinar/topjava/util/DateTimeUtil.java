@@ -15,19 +15,19 @@ public class DateTimeUtil {
         return ldt == null ? "" : ldt.format(DATE_TIME_FORMATTER);
     }
 
-    public static LocalDate parseDate(String string, LocalDate defaultDate) {
+    public static LocalDate parseDate(String string) {
         try {
-            return (string == null) ? defaultDate : LocalDate.parse(string, DateTimeUtil.DATE_FORMATTER);
+            return (string == null) ? null : LocalDate.parse(string, DateTimeUtil.DATE_FORMATTER);
         } catch (DateTimeParseException e) {
-            return defaultDate;
+            return null;
         }
     }
 
-    public static LocalTime parseTime(String string, LocalTime defaultTime) {
+    public static LocalTime parseTime(String string) {
         try {
-            return (string == null) ? defaultTime : LocalTime.parse(string, DateTimeUtil.TIME_FORMATTER);
+            return (string == null) ? null : LocalTime.parse(string, DateTimeUtil.TIME_FORMATTER);
         } catch (DateTimeParseException e) {
-            return defaultTime;
+            return null;
         }
     }
 }

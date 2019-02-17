@@ -18,6 +18,6 @@ public interface MealService {
 
     List<Meal> getAll(int userId);
 
-    List<Meal> getAll(int userId, LocalDate startDate, LocalDate endDate);
+    List<Meal> getAllFiltered(int userId, LocalDate startDate, LocalDate endDate);
 
 }
