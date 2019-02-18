@@ -36,17 +36,20 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
             repository.computeIfAbsent(userId, ConcurrentHashMap::new).put(meal.getId(), meal);
             return meal;
         }
-        return isUserMapExist(userId) ? repository.get(userId).computeIfPresent(meal.getId(), (id, oldMeal) -> meal) : null;
+        Map<Integer, Meal> userMap = repository.get(userId);
+        return userMap != null ? userMap.computeIfPresent(meal.getId(), (id, oldMeal) -> meal) : null;
     }
 
     @Override
     public boolean delete(int id, int userId) {
-        return isUserMapExist(userId) && repository.get(userId).remove(id) != null;
+        Map<Integer, Meal> userMap = repository.get(userId);
+        return userMap != null && userMap.remove(id) != null;
     }
 
     @Override
     public Meal get(int id, int userId) {
-        return isUserMapExist(userId) ? repository.get(userId).get(id) : null;
+        Map<Integer, Meal> userMap = repository.get(userId);
+        return userMap != null ? userMap.get(id) : null;
     }
 
     @Override
@@ -60,14 +63,11 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     }
 
     private List<Meal> getUserMeals(int userId, Predicate<Meal> filter) {
-        return isUserMapExist(userId) ? repository.get(userId).values().stream()
+        Map<Integer, Meal> userMap = repository.get(userId);
+        return userMap != null ? userMap.values().stream()
                 .filter(filter)
                 .sorted(DATE_TIME_COMPARATOR)
                 .collect(Collectors.toList()) : Collections.emptyList();
-    }
-
-    private boolean isUserMapExist(int userId) {
-        return repository.get(userId) != null;
     }
 
 }
