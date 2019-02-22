@@ -3,6 +3,7 @@ package ru.javawebinar.topjava.repository.inmemory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
+import ru.javawebinar.topjava.MealTestData;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.MealsUtil;
@@ -20,6 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import static ru.javawebinar.topjava.MealTestData.*;
 import static ru.javawebinar.topjava.UserTestData.ADMIN_ID;
 import static ru.javawebinar.topjava.UserTestData.USER_ID;
 
@@ -31,10 +33,21 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     private Map<Integer, InMemoryBaseRepositoryImpl<Meal>> usersMealsMap = new ConcurrentHashMap<>();
 
     {
-        MealsUtil.MEALS.forEach(meal -> save(meal, USER_ID));
+        save(USER_MEAL1, USER_ID);
+        save(USER_MEAL2, USER_ID);
+        save(USER_MEAL3, USER_ID);
+        save(USER_MEAL4, USER_ID);
+        save(USER_MEAL5, USER_ID);
+        save(USER_MEAL6, USER_ID);
+        save(USER_MEAL7, USER_ID);
+        save(USER_MEAL8, USER_ID);
+        save(USER_MEAL9, USER_ID);
+        save(USER_MEAL10, USER_ID);
+        save(USER_MEAL11, USER_ID);
+        save(USER_MEAL12, USER_ID);
 
-        save(new Meal(LocalDateTime.of(2015, Month.JUNE, 1, 14, 0), "Админ ланч", 510), ADMIN_ID);
-        save(new Meal(LocalDateTime.of(2015, Month.JUNE, 1, 21, 0), "Админ ужин", 1500), ADMIN_ID);
+        save(ADMIN_MEAL1, ADMIN_ID);
+        save(ADMIN_MEAL2, ADMIN_ID);
     }
 
 
