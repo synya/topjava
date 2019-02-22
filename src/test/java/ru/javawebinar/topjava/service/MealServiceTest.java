@@ -61,8 +61,10 @@ public class MealServiceTest {
 
     @Test
     public void getBetweenDateTimes() {
-        assertMatch(service.getBetweenDateTimes(LocalDateTime.of(2015, Month.MAY, 29, 0, 0), LocalDateTime.of(2015, Month.MAY, 30, 23, 0), USER_ID), USER_MEAL9, USER_MEAL8,
-                USER_MEAL7, USER_MEAL6, USER_MEAL5, USER_MEAL4);
+        LocalDateTime startDateTime = LocalDateTime.of(2015, Month.MAY, 29, 0, 0);
+        LocalDateTime endDateTime = LocalDateTime.of(2015, Month.MAY, 30, 23, 0);
+        assertMatch(service.getBetweenDateTimes(startDateTime, endDateTime, USER_ID),
+                USER_MEAL9, USER_MEAL8, USER_MEAL7, USER_MEAL6, USER_MEAL5, USER_MEAL4);
     }
 
     @Test
@@ -90,7 +92,7 @@ public class MealServiceTest {
 
     @Test
     public void create() {
-        Meal meal = new Meal(LocalDateTime.of(2015, Month.MAY, 15, 20, 0), "Тест", 1510);
+        Meal meal = new Meal(LocalDateTime.now(), "Тест", 1510);
         service.create(meal, USER_ID);
         assertMatch(service.get(START_SEQ + 16, USER_ID), meal);
     }
