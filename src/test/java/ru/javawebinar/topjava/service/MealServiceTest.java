@@ -4,8 +4,7 @@ import org.junit.AfterClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.junit.rules.TestRule;
-import org.junit.rules.TestWatcher;
+import org.junit.rules.Stopwatch;
 import org.junit.runner.Description;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -35,37 +34,29 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 public class MealServiceTest {
 
     private static final Logger log = LoggerFactory.getLogger(MealServiceTest.class);
+    private static final String STDOUT_SEPARATOR = "------------------------------------------------------------";
+    private static StringBuilder stringBuilder = new StringBuilder("\n" + STDOUT_SEPARATOR + "\n");
 
     @Rule
     public final ExpectedException expectedException = ExpectedException.none();
 
-    private static StringBuilder stringBuilder = new StringBuilder("\n");
 
     @Rule
-    public final TestRule testRule = new TestWatcher() {
-        private long startTime;
+    public final Stopwatch stopwatch = new Stopwatch() {
 
         @Override
-        protected void starting(Description description) {
-            super.starting(description);
-            startTime = System.currentTimeMillis();
-        }
-
-        @Override
-        protected void finished(Description description) {
-            long executionTime = System.currentTimeMillis() - startTime;
-            String executionTimeString = "execution time: " + executionTime + " ms.";
-            log.info(executionTimeString);
-            stringBuilder.append(description.getDisplayName());
-            stringBuilder.append(": ");
-            stringBuilder.append(executionTimeString);
-            stringBuilder.append("\n");
-            super.finished(description);
+        protected void finished(long nanos, Description description) {
+            long millis = nanos / 1_000_000;
+            String executionTime = "execution time: " + millis + " ms.";
+            log.info(executionTime);
+            stringBuilder.append(String.format("%-32s: %s\n", description.getMethodName(), executionTime));
+            super.finished(nanos, description);
         }
     };
 
     @AfterClass
     public static void afterClass() {
+        stringBuilder.append(STDOUT_SEPARATOR + "\n");
         System.out.println(stringBuilder.toString());
     }
 
