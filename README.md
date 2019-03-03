@@ -1,4 +1,5 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/6e100f2d7a4f4522bbfcd00a63b6f7ec)](https://www.codacy.com/app/synya/topjava?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=synya/topjava&amp;utm_campaign=Badge_Grade)
+[![Build Status](https://travis-ci.org/synya/topjava.svg?branch=master)](https://travis-ci.org/synya/topjava)
 
 Java Enterprise Online Project 
 ===============================
