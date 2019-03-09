@@ -14,6 +14,8 @@ import static ru.javawebinar.topjava.util.DateTimeUtil.adjustStartDateTime;
 public interface MealService {
     Meal get(int id, int userId) throws NotFoundException;
 
+    Meal getWithUser(int id, int userId) throws NotFoundException;
+
     void delete(int id, int userId) throws NotFoundException;
 
     default List<Meal> getBetweenDates(@Nullable LocalDate startDate, @Nullable LocalDate endDate, int userId) {
