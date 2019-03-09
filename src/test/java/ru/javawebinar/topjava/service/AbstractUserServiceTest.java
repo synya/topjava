@@ -18,7 +18,7 @@ import static ru.javawebinar.topjava.UserTestData.*;
 public abstract class AbstractUserServiceTest extends AbstractServiceTest {
 
     @Autowired
-    private UserService service;
+    protected UserService service;
 
     @Autowired
     private CacheManager cacheManager;
@@ -34,7 +34,7 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
         User created = service.create(newUser);
         newUser.setId(created.getId());
         assertMatch(newUser, created);
-        assertMatch(service.getAll(), ADMIN, newUser, USER);
+        assertMatch(service.getAll(), ADMIN, USER_WITH_NO_MEALS, newUser, USER);
     }
 
     @Test(expected = DataAccessException.class)
@@ -45,7 +45,7 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
     @Test
     public void delete() throws Exception {
         service.delete(USER_ID);
-        assertMatch(service.getAll(), ADMIN);
+        assertMatch(service.getAll(), ADMIN, USER_WITH_NO_MEALS);
     }
 
     @Test(expected = NotFoundException.class)
@@ -82,6 +82,6 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
     @Test
     public void getAll() throws Exception {
         List<User> all = service.getAll();
-        assertMatch(all, ADMIN, USER);
+        assertMatch(all, ADMIN, USER_WITH_NO_MEALS, USER);
     }
 }

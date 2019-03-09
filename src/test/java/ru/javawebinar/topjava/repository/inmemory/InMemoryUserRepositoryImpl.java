@@ -23,6 +23,11 @@ public class InMemoryUserRepositoryImpl extends InMemoryBaseRepositoryImpl<User>
     }
 
     @Override
+    public User getWithMeals(int id) {
+        return null;
+    }
+
+    @Override
     public List<User> getAll() {
         return getCollection().stream()
                 .sorted(Comparator.comparing(User::getName).thenComparing(User::getEmail))
