@@ -3,6 +3,7 @@ package ru.javawebinar.topjava.web;
 import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.util.StringUtils;
+import ru.javawebinar.topjava.Profiles;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.web.meal.MealRestController;
 
@@ -30,7 +31,7 @@ public class MealServlet extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         ConfigurableEnvironment springContextEnvironment = springContext.getEnvironment();
-        springContextEnvironment.setActiveProfiles("hsqldb", "jdbc");
+        springContextEnvironment.setActiveProfiles(Profiles.HSQL_DB, Profiles.JDBC);
         springContext.load("spring/spring-app.xml", "spring/spring-db.xml");
         springContext.refresh();
         mealController = springContext.getBean(MealRestController.class);
