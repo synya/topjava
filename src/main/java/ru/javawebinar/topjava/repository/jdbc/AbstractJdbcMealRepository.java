@@ -28,8 +28,14 @@ public abstract class AbstractJdbcMealRepository implements MealRepository {
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    @Autowired
     private SimpleJdbcInsert insertMeal;
+
+    @Autowired
+    public void setInsertMeal(SimpleJdbcInsert insertMeal) {
+        this.insertMeal = insertMeal
+                .withTableName("meals")
+                .usingGeneratedKeyColumns("id");
+    }
 
     @Override
     public Meal save(Meal meal, int userId) {
