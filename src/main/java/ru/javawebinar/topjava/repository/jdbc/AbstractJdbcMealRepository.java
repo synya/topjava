@@ -22,21 +22,14 @@ public abstract class AbstractJdbcMealRepository implements MealRepository {
 
     private static final RowMapper<Meal> ROW_MAPPER = BeanPropertyRowMapper.newInstance(Meal.class);
 
-    private final JdbcTemplate jdbcTemplate;
-
-    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-
-    private final SimpleJdbcInsert insertMeal;
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public AbstractJdbcMealRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
-        this.insertMeal = new SimpleJdbcInsert(jdbcTemplate)
-                .withTableName("meals")
-                .usingGeneratedKeyColumns("id");
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-        this.jdbcTemplate = jdbcTemplate;
-        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
-    }
+    @Autowired
+    private SimpleJdbcInsert insertMeal;
 
     @Override
     public Meal save(Meal meal, int userId) {
@@ -72,11 +65,6 @@ public abstract class AbstractJdbcMealRepository implements MealRepository {
         List<Meal> meals = jdbcTemplate.query(
                 "SELECT * FROM meals WHERE id = ? AND user_id = ?", ROW_MAPPER, id, userId);
         return DataAccessUtils.singleResult(meals);
-    }
-
-    @Override
-    public Meal getWithUser(int id, int userId) {
-        return null;
     }
 
     @Override

@@ -18,7 +18,7 @@ public class SpringMain {
     public static void main(String[] args) {
         GenericXmlApplicationContext springContext = new GenericXmlApplicationContext();
         ConfigurableEnvironment springContextEnvironment = springContext.getEnvironment();
-        springContextEnvironment.setActiveProfiles("hsqldb", "jdbc");
+        springContextEnvironment.setActiveProfiles(Profiles.getActiveDbProfile(), Profiles.JDBC);
         springContext.load("spring/spring-app.xml", "spring/spring-db.xml");
         springContext.refresh();
         System.out.println("Bean definition names: " + Arrays.toString(springContext.getBeanDefinitionNames()));

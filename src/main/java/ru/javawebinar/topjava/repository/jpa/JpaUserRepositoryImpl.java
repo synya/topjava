@@ -43,11 +43,6 @@ public class JpaUserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User getWithMeals(int id) {
-        return null;
-    }
-
-    @Override
     @Transactional
     public boolean delete(int id) {
 
