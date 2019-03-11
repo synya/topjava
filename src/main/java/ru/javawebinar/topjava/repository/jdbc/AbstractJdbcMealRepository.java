@@ -15,7 +15,6 @@ import ru.javawebinar.topjava.repository.MealRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Repository
 public abstract class AbstractJdbcMealRepository implements MealRepository {
 
     protected abstract <T> T getDbSpecificDateTime(LocalDateTime localDateTime);

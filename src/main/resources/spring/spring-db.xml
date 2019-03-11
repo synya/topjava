@@ -49,7 +49,10 @@
         <bean id="namedJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
             <constructor-arg ref="jdbcTemplate"/>
         </bean>
-        <bean id="insertMeal" class="org.springframework.jdbc.core.simple.SimpleJdbcInsert">
+        <bean id="insertMeal" class="org.springframework.jdbc.core.simple.SimpleJdbcInsert" scope="prototype">
+            <constructor-arg ref="jdbcTemplate"/>
+        </bean>
+        <bean id="insertUser" class="org.springframework.jdbc.core.simple.SimpleJdbcInsert" scope="prototype">
             <constructor-arg ref="jdbcTemplate"/>
         </bean>
     </beans>
