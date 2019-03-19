@@ -125,6 +125,10 @@ public class User extends AbstractNamedEntity {
         return roles;
     }
 
+    public void setRole(Role role) {
+        roles = EnumSet.of(role);
+    }
+
     public String getPassword() {
         return password;
     }
