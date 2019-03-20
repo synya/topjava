@@ -17,6 +17,11 @@ import ru.javawebinar.topjava.repository.UserRepository;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collector;
 
 @Repository
 @Transactional(readOnly = true)
@@ -48,7 +53,6 @@ public class JdbcUserRepositoryImpl implements UserRepository {
         if (user.isNew()) {
             Number newKey = insertUser.executeAndReturnKey(parameterSource);
             user.setId(newKey.intValue());
-            insertRoles(user.getRoles(), user.getId());
         } else {
             if (namedParameterJdbcTemplate.update(
                     "UPDATE users SET name=:name, email=:email, password=:password, " +
@@ -57,8 +61,8 @@ public class JdbcUserRepositoryImpl implements UserRepository {
                 return null;
             }
             deleteRoles(user.getId());
-            insertRoles(user.getRoles(), user.getId());
         }
+        insertRoles(user.getRoles(), user.getId());
         return user;
     }
 
@@ -92,6 +96,7 @@ public class JdbcUserRepositoryImpl implements UserRepository {
                 "ORDER BY name, email", ROW_MAPPER));
     }
 
+    /*
     private List<User> mergeUserRoles(List<User> users) {
         Map<Integer, User> userMap = new LinkedHashMap<>();
         users.forEach(user -> userMap.merge(user.getId(), user, (oldUser, newUser) -> {
@@ -101,6 +106,46 @@ public class JdbcUserRepositoryImpl implements UserRepository {
             return oldUser;
         }));
         return new ArrayList<>(userMap.values());
+    }
+    */
+
+    private List<User> mergeUserRoles(List<User> users) {
+        class UserCollector implements Collector<User, Map<Integer, User>, List<User>> {
+            @Override
+            public Supplier<Map<Integer, User>> supplier() {
+                return LinkedHashMap::new;
+            }
+
+            @Override
+            public BiConsumer<Map<Integer, User>, User> accumulator() {
+                return (map, user) -> map.merge(user.getId(), user, (oldUser, newUser) -> {
+                    Set<Role> roles = oldUser.getRoles();
+                    roles.addAll(newUser.getRoles());
+                    oldUser.setRoles(roles);
+                    return oldUser;
+                });
+            }
+
+            @Override
+            public BinaryOperator<Map<Integer, User>> combiner() {
+                return (map1, map2) -> {
+                    map1.putAll(map2);
+                    return map1;
+                };
+            }
+
+            @Override
+            public Function<Map<Integer, User>, List<User>> finisher() {
+                return (map) -> new ArrayList<>(map.values());
+            }
+
+            @Override
+            public Set<Characteristics> characteristics() {
+                return Collections.emptySet();
+            }
+        }
+        return users.stream()
+                .collect(new UserCollector());
     }
 
     private int[] insertRoles(Set<Role> roles, Integer userId) {

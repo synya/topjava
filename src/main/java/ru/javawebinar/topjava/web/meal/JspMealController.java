@@ -6,7 +6,10 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import ru.javawebinar.topjava.model.Meal;
 
+import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 
 import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalDate;
@@ -41,22 +44,24 @@ public class JspMealController extends AbstractMealController {
     }
 
     @PostMapping("/filter")
-    public String getBetween(@RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate,
-                             @RequestParam("startTime") String startTime, @RequestParam("endTime") String endTime,
-                             Model model) {
-        model.addAttribute("meals", super.getBetween(parseLocalDate(startDate), parseLocalTime(startTime),
-                parseLocalDate(endDate), parseLocalTime(endTime)));
+    public String getBetween(HttpServletRequest request, Model model) {
+        LocalDate startDate = parseLocalDate(request.getParameter("startDate"));
+        LocalDate endDate = parseLocalDate(request.getParameter("endDate"));
+        LocalTime startTime = parseLocalTime(request.getParameter("startTime"));
+        LocalTime endTime = parseLocalTime(request.getParameter("endTime"));
+        model.addAttribute("meals", super.getBetween(startDate, startTime, endDate, endTime));
         return "meals";
     }
 
     @PostMapping()
-    public String persist(@RequestParam("dateTime") String dateTime, @RequestParam("description") String description,
-                          @RequestParam("calories") String calories, @RequestParam("id") String id) {
-        Meal meal = new Meal(LocalDateTime.parse(dateTime), description, Integer.parseInt(calories));
-        if (StringUtils.isEmpty(id)) {
+    public String persist(HttpServletRequest request) {
+        Meal meal = new Meal(LocalDateTime.parse(request.getParameter("dateTime")),
+                request.getParameter("description"),
+                Integer.parseInt(request.getParameter("calories")));
+        if (StringUtils.isEmpty(request.getParameter("id"))) {
             super.create(meal);
         } else {
-            super.update(meal, Integer.valueOf(id));
+            super.update(meal, Integer.valueOf(request.getParameter("id")));
         }
         return "redirect:/meals";
     }
