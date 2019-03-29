@@ -78,9 +78,9 @@ class MealRestControllerTest extends AbstractControllerTest {
 
     @Test
     void testGetBetween() throws Exception {
-        String uriParameters = "?startDateTime=" +
-                LocalDateTime.of(2015, Month.MAY, 30, 0, 0, 0) + "&" +
-                "endDateTime=" + LocalDateTime.of(2015, Month.MAY, 30, 23, 59, 59);
+        String uriParameters = "?startDate=" +
+                LocalDate.of(2015, Month.MAY, 30) + "&" +
+                "endDate=" + LocalDate.of(2015, Month.MAY, 30);
         mockMvc.perform(get(REST_URL + "between" + uriParameters))
                 .andDo(print())
                 .andExpect(status().isOk())
