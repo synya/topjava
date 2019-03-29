@@ -7,8 +7,11 @@ import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.service.AbstractJpaUserServiceTest;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static ru.javawebinar.topjava.Profiles.DATAJPA;
+import static ru.javawebinar.topjava.TestUtil.assertMatch;
 import static ru.javawebinar.topjava.UserTestData.*;
 
 @ActiveProfiles(DATAJPA)
@@ -16,8 +19,10 @@ class DataJpaUserServiceTest extends AbstractJpaUserServiceTest {
     @Test
     void testGetWithMeals() throws Exception {
         User admin = service.getWithMeals(ADMIN_ID);
-        assertMatch(admin, ADMIN);
-        MealTestData.assertMatch(admin.getMeals(), MealTestData.ADMIN_MEAL2, MealTestData.ADMIN_MEAL1);
+        assertMatch(admin, ADMIN, "registered", "meals");
+        assertMatch(admin.getMeals(),
+                List.of(MealTestData.ADMIN_MEAL2, MealTestData.ADMIN_MEAL1),
+                "user");
     }
 
     @Test

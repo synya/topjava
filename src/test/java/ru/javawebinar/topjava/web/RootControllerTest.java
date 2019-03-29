@@ -2,8 +2,6 @@ package ru.javawebinar.topjava.web;
 
 import org.assertj.core.matcher.AssertionMatcher;
 import org.junit.jupiter.api.Test;
-import ru.javawebinar.topjava.MealToTestData;
-import ru.javawebinar.topjava.UserTestData;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.to.MealTo;
 
@@ -13,6 +11,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static ru.javawebinar.topjava.MealTestData.MEALS;
+import static ru.javawebinar.topjava.TestUtil.assertMatch;
 import static ru.javawebinar.topjava.UserTestData.*;
 import static ru.javawebinar.topjava.util.MealsUtil.getWithExcess;
 
@@ -29,7 +28,7 @@ class RootControllerTest extends AbstractControllerTest {
                         new AssertionMatcher<List<User>>() {
                             @Override
                             public void assertion(List<User> actual) throws AssertionError {
-                                UserTestData.assertMatch(actual, ADMIN, USER);
+                                assertMatch(actual, List.of(ADMIN, USER), "registered", "meals");
                             }
                         }
                 ));
@@ -46,7 +45,7 @@ class RootControllerTest extends AbstractControllerTest {
                         new AssertionMatcher<List<MealTo>>() {
                             @Override
                             public void assertion(List<MealTo> actual) throws AssertionError {
-                                MealToTestData.assertMatch(actual, getWithExcess(MEALS, USER.getCaloriesPerDay()));
+                                assertMatch(actual, getWithExcess(MEALS, USER.getCaloriesPerDay()));
                             }
                         }));
     }
