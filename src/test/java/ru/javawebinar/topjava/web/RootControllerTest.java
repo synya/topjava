@@ -12,8 +12,9 @@ import java.util.List;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static ru.javawebinar.topjava.MealToTestData.MEAL_TOS;
+import static ru.javawebinar.topjava.MealTestData.MEALS;
 import static ru.javawebinar.topjava.UserTestData.*;
+import static ru.javawebinar.topjava.util.MealsUtil.getWithExcess;
 
 class RootControllerTest extends AbstractControllerTest {
 
@@ -45,7 +46,7 @@ class RootControllerTest extends AbstractControllerTest {
                         new AssertionMatcher<List<MealTo>>() {
                             @Override
                             public void assertion(List<MealTo> actual) throws AssertionError {
-                                MealToTestData.assertMatch(actual, MEAL_TOS);
+                                MealToTestData.assertMatch(actual, getWithExcess(MEALS, USER.getCaloriesPerDay()));
                             }
                         }));
     }
