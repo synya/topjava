@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava;
 
+import org.springframework.test.web.servlet.ResultMatcher;
 import ru.javawebinar.topjava.model.Meal;
 
 import java.time.Month;
@@ -29,5 +30,21 @@ public class MealTestData {
 
     public static Meal getUpdated() {
         return new Meal(MEAL1_ID, MEAL1.getDateTime(), "Обновленный завтрак", 200);
+    }
+
+    public static void assertMatch(Meal actual, Meal expected) {
+        TestUtil.assertMatch(actual, expected, "user");
+    }
+
+    public static void assertMatch(Iterable<Meal> actual, Meal... expected) {
+        assertMatch(actual, List.of(expected));
+    }
+
+    public static void assertMatch(Iterable<Meal> actual, Iterable<Meal> expected) {
+        TestUtil.assertMatch(actual, expected, "user");
+    }
+
+    public static ResultMatcher fromJsonAndAssert(Meal expected) {
+        return TestUtil.fromJsonAndAssert(expected, Meal.class);
     }
 }

@@ -9,13 +9,11 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 import javax.validation.ConstraintViolationException;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.List;
 
 import static java.time.LocalDateTime.of;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static ru.javawebinar.topjava.MealTestData.*;
-import static ru.javawebinar.topjava.TestUtil.assertMatch;
 import static ru.javawebinar.topjava.UserTestData.ADMIN_ID;
 import static ru.javawebinar.topjava.UserTestData.USER_ID;
 
@@ -27,7 +25,7 @@ public abstract class AbstractMealServiceTest extends AbstractServiceTest {
     @Test
     void delete() throws Exception {
         service.delete(MEAL1_ID, USER_ID);
-        assertMatch(service.getAll(USER_ID), List.of(MEAL6, MEAL5, MEAL4, MEAL3, MEAL2), "user");
+        assertMatch(service.getAll(USER_ID), MEAL6, MEAL5, MEAL4, MEAL3, MEAL2);
     }
 
     @Test
@@ -42,13 +40,13 @@ public abstract class AbstractMealServiceTest extends AbstractServiceTest {
         Meal created = service.create(newMeal, USER_ID);
         newMeal.setId(created.getId());
         assertMatch(newMeal, created);
-        assertMatch(service.getAll(USER_ID), List.of(newMeal, MEAL6, MEAL5, MEAL4, MEAL3, MEAL2, MEAL1), "user");
+        assertMatch(service.getAll(USER_ID), newMeal, MEAL6, MEAL5, MEAL4, MEAL3, MEAL2, MEAL1);
     }
 
     @Test
     void get() throws Exception {
         Meal actual = service.get(ADMIN_MEAL_ID, ADMIN_ID);
-        assertMatch(actual, ADMIN_MEAL1, "user");
+        assertMatch(actual, ADMIN_MEAL1);
     }
 
     @Test
@@ -61,7 +59,7 @@ public abstract class AbstractMealServiceTest extends AbstractServiceTest {
     void update() throws Exception {
         Meal updated = getUpdated();
         service.update(updated, USER_ID);
-        assertMatch(service.get(MEAL1_ID, USER_ID), updated, "user");
+        assertMatch(service.get(MEAL1_ID, USER_ID), updated);
     }
 
     @Test
@@ -72,15 +70,14 @@ public abstract class AbstractMealServiceTest extends AbstractServiceTest {
 
     @Test
     void getAll() throws Exception {
-        assertMatch(service.getAll(USER_ID), MEALS, "user");
+        assertMatch(service.getAll(USER_ID), MEALS);
     }
 
     @Test
     void getBetween() throws Exception {
         assertMatch(service.getBetweenDates(
                 LocalDate.of(2015, Month.MAY, 30),
-                LocalDate.of(2015, Month.MAY, 30), USER_ID),
-                List.of(MEAL3, MEAL2, MEAL1), "user");
+                LocalDate.of(2015, Month.MAY, 30), USER_ID), MEAL3, MEAL2, MEAL1);
     }
 
     @Test

@@ -9,13 +9,12 @@ import ru.javawebinar.topjava.web.AbstractControllerTest;
 import ru.javawebinar.topjava.web.json.JsonUtil;
 
 import java.util.Collections;
-import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.javawebinar.topjava.TestUtil.*;
+import static ru.javawebinar.topjava.TestUtil.readFromJson;
 import static ru.javawebinar.topjava.UserTestData.*;
 
 class AdminRestControllerTest extends AbstractControllerTest {
@@ -29,7 +28,7 @@ class AdminRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 // https://jira.spring.io/browse/SPR-14472
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(fromJsonAndAssert(ADMIN, User.class, "registered", "meals"));
+                .andExpect(fromJsonAndAssert(ADMIN));
     }
 
     @Test
@@ -37,7 +36,7 @@ class AdminRestControllerTest extends AbstractControllerTest {
         mockMvc.perform(get(REST_URL + "by?email=" + USER.getEmail()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(fromJsonAndAssert(USER, User.class, "registered", "meals"));
+                .andExpect(fromJsonAndAssert(USER));
     }
 
     @Test
@@ -45,7 +44,7 @@ class AdminRestControllerTest extends AbstractControllerTest {
         mockMvc.perform(delete(REST_URL + USER_ID))
                 .andDo(print())
                 .andExpect(status().isNoContent());
-        assertMatch(userService.getAll(), List.of(ADMIN), "registered", "meals");
+        assertMatch(userService.getAll(), ADMIN);
     }
 
     @Test
@@ -73,7 +72,7 @@ class AdminRestControllerTest extends AbstractControllerTest {
         expected.setId(returned.getId());
 
         assertMatch(returned, expected);
-        assertMatch(userService.getAll(), List.of(ADMIN, expected, USER), "registered", "meals");
+        assertMatch(userService.getAll(), ADMIN, expected, USER);
     }
 
     @Test
@@ -81,6 +80,6 @@ class AdminRestControllerTest extends AbstractControllerTest {
         mockMvc.perform(get(REST_URL))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(fromJsonAndAssert(List.of(ADMIN, USER), User.class, "registered", "meals"));
+                .andExpect(fromJsonAndAssert(ADMIN, USER));
     }
 }
