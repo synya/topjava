@@ -39,11 +39,11 @@ public class TestUtil {
         assertThat(actual).usingElementComparatorIgnoringFields(ignoreProperties).isEqualTo(expected);
     }
 
-    public static <T> ResultMatcher fromJsonAndAssert(T expected, Class<T> clazz) {
-        return result -> assertMatch(readFromJsonMvcResult(result, clazz), expected);
+    public static <T> ResultMatcher fromJsonAndAssert(T expected, Class<T> clazz, String... ignoreProperties) {
+        return result -> assertMatch(readFromJsonMvcResult(result, clazz), expected, ignoreProperties);
     }
 
-    public static <T> ResultMatcher fromJsonAndAssert(Iterable<T> expected, Class<T> clazz) {
-        return result -> assertMatch(readListFromJsonMvcResult(result, clazz), expected);
+    public static <T> ResultMatcher fromJsonAndAssert(Iterable<T> expected, Class<T> clazz, String... ignoreProperties) {
+        return result -> assertMatch(readListFromJsonMvcResult(result, clazz), expected, ignoreProperties);
     }
 }

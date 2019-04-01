@@ -28,10 +28,10 @@ public class UserTestData {
     }
 
     public static ResultMatcher fromJsonAndAssert(User... expected) {
-        return TestUtil.fromJsonAndAssert(List.of(expected), User.class);
+        return TestUtil.fromJsonAndAssert(List.of(expected), User.class, "registered", "meals");
     }
 
     public static ResultMatcher fromJsonAndAssert(User expected) {
-        return TestUtil.fromJsonAndAssert(expected, User.class);
+        return TestUtil.fromJsonAndAssert(expected, User.class, "registered", "meals");
     }
 }

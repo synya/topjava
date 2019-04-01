@@ -45,6 +45,6 @@ public class MealTestData {
     }
 
     public static ResultMatcher fromJsonAndAssert(Meal expected) {
-        return TestUtil.fromJsonAndAssert(expected, Meal.class);
+        return TestUtil.fromJsonAndAssert(expected, Meal.class, "user");
     }
 }
