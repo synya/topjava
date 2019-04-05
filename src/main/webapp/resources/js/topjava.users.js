@@ -50,3 +50,14 @@ function updateTable() {
         context.datatableApi.clear().rows.add(data).draw();
     });
 }
+
+function setEnabled(id, enabled) {
+    $.ajax({
+        type: "POST",
+        url: context.ajaxUrl + id + "/enable",
+        data: {enabled: enabled}
+    }).done(function () {
+        context.update();
+        successNoty("Done!");
+    });
+}
