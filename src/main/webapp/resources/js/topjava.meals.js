@@ -3,6 +3,9 @@ $(function () {
     makeEditable({
             formId: "mealEditForm",
             ajaxUrl: "ajax/profile/meals/",
+            update: function () {
+                updateTable();
+            },
             datatableApi: $("#datatable").DataTable({
                 "paging": false,
                 "info": true,
@@ -35,3 +38,18 @@ $(function () {
         }
     );
 });
+
+function updateTable() {
+    $.ajax({
+        url: "ajax/profile/meals/filter",
+        type: "GET",
+        data: $("#mealFilterForm").serialize()
+    }).done(function (data) {
+        context.datatableApi.clear().rows.add(data).draw();
+    });
+}
+
+function clearFilterAndUpdate() {
+    $("#mealFilterForm")[0].reset();
+    updateTable();
+}

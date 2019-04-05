@@ -3,6 +3,9 @@ $(function () {
     makeEditable({
             formId: "userEditForm",
             ajaxUrl: "ajax/admin/users/",
+            update: function () {
+                updateTable();
+            },
             datatableApi: $("#datatable").DataTable({
                 "paging": false,
                 "info": true,
@@ -41,3 +44,9 @@ $(function () {
         }
     );
 });
+
+function updateTable() {
+    $.get(context.ajaxUrl, function (data) {
+        context.datatableApi.clear().rows.add(data).draw();
+    });
+}

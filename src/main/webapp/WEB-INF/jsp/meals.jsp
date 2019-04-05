@@ -14,7 +14,39 @@
         <h3 class="text-center"><spring:message code="meal.title"/></h3>
     </div>
 </div>
-<section>
+
+<div class="container">
+    <form id="mealFilterForm">
+        <div class="row">
+            <div class="col-md-4">
+                <label for="startDate"><spring:message code="meal.startDate"/></label>
+                <input type="date" class="form-control" id="startDate" name="startDate" value="${param.startDate}"
+                       placeholder="<spring:message code="meal.startDate"/>">
+                <label for="startTime"><spring:message code="meal.startTime"/></label>
+                <input type="time" class="form-control" id="startTime" name="startTime" value="${param.startTime}"
+                       placeholder="<spring:message code="meal.startTime"/>">
+            </div>
+            <div class="col-md-4">
+                <label for="endDate"><spring:message code="meal.endDate"/></label>
+                <input type="date" class="form-control" id="endDate" name="endDate" value="${param.endDate}"
+                       placeholder="<spring:message code="meal.endDate"/>">
+                <label for="endTime"><spring:message code="meal.endTime"/></label>
+                <input type="time" class="form-control" id="endTime" name="endTime" value="${param.endTime}"
+                       placeholder="<spring:message code="meal.endTime"/>">
+            </div>
+        </div>
+    </form>
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <button class="btn btn-primary" onclick="context.update()"><spring:message code="meal.filter"/></button>
+            <button class="btn btn-secondary" onclick="clearFilterAndUpdate()"><spring:message code="meal.resetFilter"/></button>
+        </div>
+    </div>
+</div>
+
+
+<div class="container">
     <button class="btn btn-primary" onclick="add()">
         <span class="fa fa-plus"></span>
         <spring:message code="common.add"/>
@@ -88,29 +120,7 @@
             </div>
         </div>
     </div>
-    <%--<editForm method="post" action="meals/filter">
-            <dl>
-                <dt><spring:message code="meal.startDate"/>:</dt>
-                <dd><input type="date" name="startDate" value="${param.startDate}"></dd>
-            </dl>
-            <dl>
-                <dt><spring:message code="meal.endDate"/>:</dt>
-                <dd><input type="date" name="endDate" value="${param.endDate}"></dd>
-            </dl>
-            <dl>
-                <dt><spring:message code="meal.startTime"/>:</dt>
-                <dd><input type="time" name="startTime" value="${param.startTime}"></dd>
-            </dl>
-            <dl>
-                <dt><spring:message code="meal.endTime"/>:</dt>
-                <dd><input type="time" name="endTime" value="${param.endTime}"></dd>
-            </dl>
-            <button type="submit"><spring:message code="meal.filter"/></button>
-        </editForm>
-        <hr>
-        <a href="meals/create"><spring:message code="meal.add"/></a>
-        <hr>--%>
-</section>
+</div>
 <jsp:include page="fragments/footer.jsp"/>
 </body>
 </html>
