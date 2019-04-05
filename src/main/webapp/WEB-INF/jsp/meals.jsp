@@ -38,7 +38,7 @@
                 <td>${meal.description}</td>
                 <td>${meal.calories}</td>
                 <td><a><span class="fa fa-pencil"><spring:message code="common.update"/></span></a></td>
-                <td><a class="delete" id="${meal.id}"><span class="fa fa-remove"><spring:message
+                <td><a onclick="deleteRow(${meal.id})"><span class="fa fa-remove"><spring:message
                         code="common.delete"/></span></a></td>
             </tr>
         </c:forEach>
