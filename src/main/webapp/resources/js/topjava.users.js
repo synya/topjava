@@ -47,17 +47,21 @@ $(function () {
 
 function updateTable() {
     $.get(context.ajaxUrl, function (data) {
-        context.datatableApi.clear().rows.add(data).draw();
+        UpdateTableWithData(data);
     });
 }
 
-function setEnabled(id, enabled) {
+function setEnabled(id, checkBox) {
+    let checkBoxState = checkBox.is(':checked');
     $.ajax({
-        type: "POST",
         url: context.ajaxUrl + id + "/enable",
-        data: {enabled: enabled}
+        type: "POST",
+        data: {enabled: checkBoxState}
     }).done(function () {
-        context.update();
-        successNoty("Done!");
+        checkBoxState ? successNoty("Enabled") : successNoty("Disabled");
+        checkBox.closest("tr").attr("data-userEnabled", checkBoxState)
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+        checkBox.prop("checked", !checkBoxState)
+        failNoty(jqXHR);
     });
 }

@@ -17,6 +17,10 @@ function add() {
     $("#editRow").modal();
 }
 
+function UpdateTableWithData(data) {
+    context.datatableApi.clear().rows.add(data).draw();
+}
+
 function deleteRow(id) {
     if (confirm('Are you sure?')) {
         $.ajax({

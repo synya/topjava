@@ -41,15 +41,17 @@ $(function () {
 
 function updateTable() {
     $.ajax({
-        url: "ajax/profile/meals/filter",
+        url: context.ajaxUrl + "filter",
         type: "GET",
         data: $("#mealFilterForm").serialize()
     }).done(function (data) {
-        context.datatableApi.clear().rows.add(data).draw();
+        UpdateTableWithData(data);
     });
 }
 
 function clearFilterAndUpdate() {
     $("#mealFilterForm")[0].reset();
-    updateTable();
+    $.get(context.ajaxUrl, function (data) {
+        UpdateTableWithData(data);
+    });
 }
