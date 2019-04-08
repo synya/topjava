@@ -17,7 +17,7 @@ function add() {
     $("#editRow").modal();
 }
 
-function UpdateTableWithData(data) {
+function updateTableWithData(data) {
     context.datatableApi.clear().rows.add(data).draw();
 }
 

@@ -46,9 +46,7 @@ $(function () {
 });
 
 function updateTable() {
-    $.get(context.ajaxUrl, function (data) {
-        UpdateTableWithData(data);
-    });
+    $.get(context.ajaxUrl, updateTableWithData);
 }
 
 function setEnabled(id, checkBox) {

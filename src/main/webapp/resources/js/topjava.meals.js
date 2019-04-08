@@ -44,14 +44,10 @@ function updateTable() {
         url: context.ajaxUrl + "filter",
         type: "GET",
         data: $("#mealFilterForm").serialize()
-    }).done(function (data) {
-        UpdateTableWithData(data);
-    });
+    }).done(updateTableWithData);
 }
 
 function clearFilterAndUpdate() {
     $("#mealFilterForm")[0].reset();
-    $.get(context.ajaxUrl, function (data) {
-        UpdateTableWithData(data);
-    });
+    $.get(context.ajaxUrl, updateTableWithData);
 }
