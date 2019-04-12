@@ -11,6 +11,21 @@ function makeEditable(ctx) {
     $.ajaxSetup({cache: false});
 }
 
+//https://stackoverflow.com/questions/23593052/format-javascript-date-to-yyyy-mm-dd
+function withZeroPrefix(strNumber) {
+    return (strNumber.length < 2) ? '0' + strNumber : strNumber;
+}
+
+function formatDateTime(date) {
+    var d = new Date(date),
+        month = withZeroPrefix('' + (d.getMonth() + 1)),
+        day = withZeroPrefix('' + d.getDate()),
+        year = d.getFullYear(),
+        hour = withZeroPrefix('' + d.getHours()),
+        minute = withZeroPrefix('' + d.getMinutes());
+    return [year, month, day].join('-') + " " + [hour, minute].join(':');
+}
+
 function add() {
     $("#modalTitle").html(i18n["addTitle"]);
     form.find(":input").val("");
@@ -21,7 +36,7 @@ function updateRow(id) {
     $("#modalTitle").html(i18n["editTitle"]);
     $.get(context.ajaxUrl + id, function (data) {
         $.each(data, function (key, value) {
-            form.find("input[name='" + key + "']").val(value);
+            form.find("input[name='" + key + "']").val(key === "dateTime" ? formatDateTime(value) : value);
         });
         $('#editRow').modal();
     });

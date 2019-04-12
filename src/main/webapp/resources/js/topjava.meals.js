@@ -28,8 +28,7 @@ $(function () {
                     "data": "dateTime",
                     "render": function (data, type, row) {
                         if (type === "display") {
-                            let date = new Date(data);
-                            return date.toLocaleString();
+                            return formatDateTime(data);
                         }
                         return data;
                     }
@@ -64,4 +63,33 @@ $(function () {
         }),
         updateTable: updateFilteredTable
     });
+    $("#startDate").datetimepicker(
+        {
+            timepicker: false,
+            format: 'Y-m-d'
+        }
+    );
+    $("#endDate").datetimepicker(
+        {
+            timepicker: false,
+            format: 'Y-m-d'
+        }
+    );
+    $("#startTime").datetimepicker(
+        {
+            datepicker: false,
+            format: 'H:i'
+        }
+    );
+    $("#endTime").datetimepicker(
+        {
+            datepicker: false,
+            format: 'H:i'
+        }
+    );
+    $("#dateTime").datetimepicker(
+        {
+            format: 'Y-m-d H:i'
+        }
+    );
 });
