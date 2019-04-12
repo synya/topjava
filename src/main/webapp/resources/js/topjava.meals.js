@@ -66,25 +66,45 @@ $(function () {
     $("#startDate").datetimepicker(
         {
             timepicker: false,
-            format: 'Y-m-d'
+            format: 'Y-m-d',
+            onShow: function (ct) {
+                this.setOptions({
+                    maxDate: $("#endDate").val() ? jQuery('#endDate').val() : false
+                })
+            }
         }
     );
     $("#endDate").datetimepicker(
         {
             timepicker: false,
-            format: 'Y-m-d'
+            format: 'Y-m-d',
+            onShow: function (ct) {
+                this.setOptions({
+                    minDate: $("#startDate").val() ? jQuery('#startDate').val() : false
+                })
+            }
         }
     );
     $("#startTime").datetimepicker(
         {
             datepicker: false,
-            format: 'H:i'
+            format: 'H:i',
+            onShow: function (ct) {
+                this.setOptions({
+                    maxTime: $("#endTime").val() ? jQuery('#endTime').val() : false
+                })
+            }
         }
     );
     $("#endTime").datetimepicker(
         {
             datepicker: false,
-            format: 'H:i'
+            format: 'H:i',
+            onShow: function (ct) {
+                this.setOptions({
+                    minTime: $("#startTime").val() ? jQuery('#startTime').val() : false
+                })
+            }
         }
     );
     $("#dateTime").datetimepicker(
