@@ -12,7 +12,7 @@ import ru.javawebinar.topjava.util.UserUtil;
 import javax.validation.Valid;
 import java.util.List;
 
-import static ru.javawebinar.topjava.util.ValidationUtil.BindingResultToResponseEntity;
+import static ru.javawebinar.topjava.util.ValidationUtil.bindingResultToResponseEntity;
 
 @RestController
 @RequestMapping("/ajax/admin/users")
@@ -40,7 +40,7 @@ public class AdminUIController extends AbstractUserController {
     @PostMapping
     public ResponseEntity<String> createOrUpdate(@Valid UserTo userTo, BindingResult result) {
         if (result.hasErrors()) {
-            return BindingResultToResponseEntity(result);
+            return bindingResultToResponseEntity(result);
         }
         if (userTo.isNew()) {
             super.create(UserUtil.createNewFromTo(userTo));

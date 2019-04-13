@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-import static ru.javawebinar.topjava.util.ValidationUtil.BindingResultToResponseEntity;
+import static ru.javawebinar.topjava.util.ValidationUtil.bindingResultToResponseEntity;
 
 @RestController
 @RequestMapping("/ajax/profile/meals")
@@ -42,7 +42,7 @@ public class MealUIController extends AbstractMealController {
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public ResponseEntity<String> createOrUpdate(@Valid Meal meal, BindingResult result) {
         if (result.hasErrors()) {
-            return BindingResultToResponseEntity(result);
+            return bindingResultToResponseEntity(result);
         }
         if (meal.isNew()) {
             super.create(meal);

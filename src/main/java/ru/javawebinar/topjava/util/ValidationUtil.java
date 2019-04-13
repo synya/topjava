@@ -58,7 +58,7 @@ public class ValidationUtil {
         return result;
     }
 
-    public static ResponseEntity<String> BindingResultToResponseEntity(BindingResult result) {
+    public static ResponseEntity<String> bindingResultToResponseEntity(BindingResult result) {
         StringJoiner joiner = new StringJoiner("<br>");
         result.getFieldErrors().forEach(
                 fe -> {
