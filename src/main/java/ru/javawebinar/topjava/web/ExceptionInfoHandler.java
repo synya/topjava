@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -57,9 +58,15 @@ public class ExceptionInfoHandler {
     }
 
     @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY)  // 422
-    @ExceptionHandler(BindException.class)
+    @ExceptionHandler({BindException.class, MethodArgumentNotValidException.class})
     public ErrorInfo bindingError(HttpServletRequest req, Exception e) {
-        return getBindingErrorInfo(req, (BindingResult) e);
+        if (e instanceof BindException) {
+            return getBindingErrorInfo(req, ((BindException) e).getBindingResult());
+        } else if (e instanceof MethodArgumentNotValidException) {
+            return getBindingErrorInfo(req, ((MethodArgumentNotValidException) e).getBindingResult());
+        } else {
+            throw new IllegalArgumentException(e);
+        }
     }
 
     //    https://stackoverflow.com/questions/538870/should-private-helper-methods-be-static-if-they-can-be-static
