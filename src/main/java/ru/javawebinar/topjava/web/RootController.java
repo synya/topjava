@@ -83,6 +83,8 @@ public class RootController extends AbstractUserController {
                 return "redirect:login?message=app.registered&username=" + userTo.getEmail();
             } catch (DataIntegrityViolationException e) {
                 result.rejectValue("email", "app.duplicateEmail");
+                model.addAttribute("userTo", userTo);
+                model.addAttribute("register", true);
                 return "profile";
             }
         }
