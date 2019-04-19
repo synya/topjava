@@ -1,13 +1,17 @@
 package ru.javawebinar.topjava.web.user;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.to.UserTo;
 import ru.javawebinar.topjava.util.UserUtil;
+import ru.javawebinar.topjava.util.exception.IllegalRequestDataException;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -32,8 +36,13 @@ public class ProfileRestController extends AbstractUserController {
 
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public ResponseEntity<User> register(@Valid @RequestBody UserTo userTo) {
-        User created = super.create(UserUtil.createNewFromTo(userTo));
+    public ResponseEntity<User> register(@Valid @RequestBody UserTo userTo, BindingResult bindingResult) throws BindException {
+        User created;
+        try {
+            created = super.create(UserUtil.createNewFromTo(userTo));
+        } catch (DataIntegrityViolationException e) {
+            throw new IllegalRequestDataException("User with this email already exists");
+        }
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
                 .buildAndExpand(created.getId()).toUri();
@@ -44,7 +53,11 @@ public class ProfileRestController extends AbstractUserController {
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@Valid @RequestBody UserTo userTo) {
-        super.update(userTo, authUserId());
+        try {
+            super.update(userTo, authUserId());
+        } catch (DataIntegrityViolationException e) {
+            throw new IllegalRequestDataException("User with this email already exists");
+        }
     }
 
     @GetMapping(value = "/text")

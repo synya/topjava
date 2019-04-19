@@ -30,3 +30,15 @@
 
 #### validate with Error
 `curl -s -X POST -d '{}' -H 'Content-Type: application/json' http://localhost:8080/topjava/rest/admin/users --user admin@gmail.com:admin`
+
+#### register with Error
+`curl -X POST -d '{"name":"New User","email":"admin@gmail.com","password":"123123123"}' -H 'Content-Type: application/json' http://localhost:8080/topjava/rest/profile/register`
+
+#### update with Error
+`curl -X PUT -d '{"name":"Updated User","email":"admin@gmail.com","password":"123123123"}' -H 'Content-Type: application/json' http://localhost:8080/topjava/rest/profile/ --user user@yandex.ru:password`
+
+#### add with Error
+`curl -X POST -d '{"name":"New User","email":"admin@gmail.com","enabled":true,"roles":["ROLE_USER"],"password":"123123123"}' -H 'Content-Type: application/json' http://localhost:8080/topjava/rest/admin/users --user admin@gmail.com:admin`
+
+#### update with Error
+`curl -X PUT -d '{"name":"New User","email":"admin@gmail.com","enabled":true,"roles":["ROLE_USER"],"password":"123123123"}' -H 'Content-Type: application/json' http://localhost:8080/topjava/rest/admin/users/100000 --user admin@gmail.com:admin`
