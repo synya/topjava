@@ -31,6 +31,7 @@ import static ru.javawebinar.topjava.util.exception.ErrorType.*;
 @Order(Ordered.HIGHEST_PRECEDENCE + 5)
 public class ExceptionInfoHandler {
     public static final String DUPLICATE_EMAIL_ERROR_MESSAGE = "User with this email already exists";
+    public static final String DUPLICATE_MEAL_DATE_TIME_ERROR_MESSAGE = "Meal with this date/time already exists";
 
     private static Logger log = LoggerFactory.getLogger(ExceptionInfoHandler.class);
 
