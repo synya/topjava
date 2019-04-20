@@ -12,6 +12,8 @@ import ru.javawebinar.topjava.util.exception.IllegalRequestDataException;
 import javax.validation.Valid;
 import java.util.List;
 
+import static ru.javawebinar.topjava.web.ExceptionInfoHandler.DUPLICATE_EMAIL_ERROR_MESSAGE;
+
 @RestController
 @RequestMapping("/ajax/admin/users")
 public class AdminUIController extends AbstractUserController {
@@ -44,7 +46,7 @@ public class AdminUIController extends AbstractUserController {
                 super.update(userTo, userTo.getId());
             }
         } catch (DataIntegrityViolationException e) {
-            throw new IllegalRequestDataException("User with this email already exists");
+            throw new IllegalRequestDataException(DUPLICATE_EMAIL_ERROR_MESSAGE);
         }
     }
 

@@ -13,6 +13,8 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
+import static ru.javawebinar.topjava.web.ExceptionInfoHandler.DUPLICATE_EMAIL_ERROR_MESSAGE;
+
 @RestController
 @RequestMapping(value = AdminRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class AdminRestController extends AbstractUserController {
@@ -37,7 +39,7 @@ public class AdminRestController extends AbstractUserController {
         try {
             created = super.create(user);
         } catch (DataIntegrityViolationException e) {
-            throw new IllegalRequestDataException("User with this email already exists");
+            throw new IllegalRequestDataException(DUPLICATE_EMAIL_ERROR_MESSAGE);
         }
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
@@ -59,7 +61,7 @@ public class AdminRestController extends AbstractUserController {
         try {
             super.update(user, id);
         } catch (DataIntegrityViolationException e) {
-            throw new IllegalRequestDataException("User with this email already exists");
+            throw new IllegalRequestDataException(DUPLICATE_EMAIL_ERROR_MESSAGE);
         }
     }
 
