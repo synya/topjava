@@ -13,8 +13,6 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
-import static ru.javawebinar.topjava.web.ExceptionInfoHandler.DUPLICATE_EMAIL_ERROR_MESSAGE;
-
 @RestController
 @RequestMapping(value = AdminRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class AdminRestController extends AbstractUserController {
@@ -35,12 +33,7 @@ public class AdminRestController extends AbstractUserController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> createWithLocation(@Valid @RequestBody User user) {
-        User created;
-        try {
-            created = super.create(user);
-        } catch (DataIntegrityViolationException e) {
-            throw new IllegalRequestDataException(DUPLICATE_EMAIL_ERROR_MESSAGE);
-        }
+        User created = super.create(user);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
                 .buildAndExpand(created.getId()).toUri();
@@ -58,11 +51,7 @@ public class AdminRestController extends AbstractUserController {
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@Valid @RequestBody User user, @PathVariable int id) {
-        try {
-            super.update(user, id);
-        } catch (DataIntegrityViolationException e) {
-            throw new IllegalRequestDataException(DUPLICATE_EMAIL_ERROR_MESSAGE);
-        }
+        super.update(user, id);
     }
 
     @Override

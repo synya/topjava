@@ -1,17 +1,19 @@
 package ru.javawebinar.topjava.util.exception;
 
+import java.util.List;
+
 public class ErrorInfo {
     private String url;
     private ErrorType type;
-    private String detail;
+    private List<String> details;
 
     public ErrorInfo() {
     }
 
-    public ErrorInfo(CharSequence url, ErrorType type, String detail) {
+    public ErrorInfo(CharSequence url, ErrorType type, List<String> details) {
         this.url = url.toString();
         this.type = type;
-        this.detail = detail;
+        this.details = details;
     }
 
     public void setUrl(String url) {
@@ -22,7 +24,11 @@ public class ErrorInfo {
         this.type = type;
     }
 
-    public void setDetail(String detail) {
-        this.detail = detail;
+    public void setDetails(List<String> details) {
+        this.details = details;
+    }
+
+    public void addDetail(String detail) {
+        this.details.add(detail);
     }
 }

@@ -2,6 +2,9 @@ package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -23,17 +26,26 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import javax.servlet.http.HttpServletRequest;
 
-import java.util.StringJoiner;
+import java.util.ArrayList;
+import java.util.List;
 
+import static ru.javawebinar.topjava.util.ValidationUtil.getRootCause;
 import static ru.javawebinar.topjava.util.exception.ErrorType.*;
 
 @RestControllerAdvice(annotations = RestController.class)
 @Order(Ordered.HIGHEST_PRECEDENCE + 5)
 public class ExceptionInfoHandler {
-    public static final String DUPLICATE_EMAIL_ERROR_MESSAGE = "User with this email already exists";
-    public static final String DUPLICATE_MEAL_DATE_TIME_ERROR_MESSAGE = "Meal with this date/time already exists";
+    public static final String DUPLICATE_EMAIL_MESSAGE_CODE = "app.errorDuplicateEmail";
+    public static final String DUPLICATE_MEAL_MESSAGE_CODE = "app.errorDuplicateMeal";
 
     private static Logger log = LoggerFactory.getLogger(ExceptionInfoHandler.class);
+
+    private final MessageSource messageSource;
+
+    @Autowired
+    public ExceptionInfoHandler(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
 
     //  http://stackoverflow.com/a/22358422/548473
     @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY)
@@ -45,6 +57,14 @@ public class ExceptionInfoHandler {
     @ResponseStatus(value = HttpStatus.CONFLICT)  // 409
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ErrorInfo conflict(HttpServletRequest req, DataIntegrityViolationException e) {
+        String errorMessage = getRootCause(e).getMessage();
+        if (errorMessage.contains("users_unique_email_idx")) {
+            return logAndGetErrorInfo(req, e, true, VALIDATION_ERROR,
+                    messageSource.getMessage(DUPLICATE_EMAIL_MESSAGE_CODE, null, LocaleContextHolder.getLocale()));
+        } else if (errorMessage.contains("meals_unique_user_datetime_idx")) {
+            return logAndGetErrorInfo(req, e, true, VALIDATION_ERROR,
+                    messageSource.getMessage(DUPLICATE_MEAL_MESSAGE_CODE, null, LocaleContextHolder.getLocale()));
+        }
         return logAndGetErrorInfo(req, e, true, DATA_ERROR);
     }
 
@@ -73,18 +93,19 @@ public class ExceptionInfoHandler {
     }
 
     //    https://stackoverflow.com/questions/538870/should-private-helper-methods-be-static-if-they-can-be-static
-    private static ErrorInfo logAndGetErrorInfo(HttpServletRequest req, Exception e, boolean logException, ErrorType errorType) {
-        Throwable rootCause = ValidationUtil.getRootCause(e);
+    private static ErrorInfo logAndGetErrorInfo(HttpServletRequest req, Exception e, boolean logException, ErrorType errorType, String... messages) {
+        Throwable rootCause = getRootCause(e);
         if (logException) {
             log.error(errorType + " at request " + req.getRequestURL(), rootCause);
         } else {
             log.warn("{} at request  {}: {}", errorType, req.getRequestURL(), rootCause.toString());
         }
-        return new ErrorInfo(req.getRequestURL(), errorType, ValidationUtil.getMessage(rootCause));
+        return new ErrorInfo(req.getRequestURL(), errorType,
+                messages.length == 0 ? List.of(ValidationUtil.getMessage(rootCause)) : List.of(messages));
     }
 
     private static ErrorInfo getBindingErrorInfo(HttpServletRequest req, BindingResult result) {
-        StringJoiner joiner = new StringJoiner("<br>");
+        ErrorInfo errorInfo = new ErrorInfo(req.getRequestURL(), ErrorType.VALIDATION_ERROR, new ArrayList<>());
         result.getFieldErrors().forEach(
                 fe -> {
                     String msg = fe.getDefaultMessage();
@@ -92,9 +113,9 @@ public class ExceptionInfoHandler {
                         if (!msg.startsWith(fe.getField())) {
                             msg = fe.getField() + ' ' + msg;
                         }
-                        joiner.add(msg);
+                        errorInfo.addDetail(msg);
                     }
                 });
-        return new ErrorInfo(req.getRequestURL(), ErrorType.VALIDATION_ERROR, joiner.toString());
+        return errorInfo;
     }
 }

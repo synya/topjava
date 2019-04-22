@@ -14,6 +14,8 @@ import ru.javawebinar.topjava.util.exception.ErrorType;
 import ru.javawebinar.topjava.web.AbstractControllerTest;
 import ru.javawebinar.topjava.web.json.JsonUtil;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -21,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.javawebinar.topjava.TestUtil.*;
 import static ru.javawebinar.topjava.UserTestData.*;
-import static ru.javawebinar.topjava.web.ExceptionInfoHandler.DUPLICATE_EMAIL_ERROR_MESSAGE;
+import static ru.javawebinar.topjava.web.ExceptionInfoHandler.DUPLICATE_EMAIL_MESSAGE_CODE;
 import static ru.javawebinar.topjava.web.user.ProfileRestController.REST_URL;
 
 class ProfileRestControllerTest extends AbstractControllerTest {
@@ -85,7 +87,8 @@ class ProfileRestControllerTest extends AbstractControllerTest {
                 .andExpect(status().isUnprocessableEntity())
                 .andReturn();
 
-        ErrorInfo expectedErrorInfo = new ErrorInfo("http://localhost" + REST_URL + "/register", ErrorType.VALIDATION_ERROR, DUPLICATE_EMAIL_ERROR_MESSAGE);
+        ErrorInfo expectedErrorInfo = new ErrorInfo("http://localhost" + REST_URL + "/register",
+                ErrorType.VALIDATION_ERROR, List.of(DUPLICATE_EMAIL_MESSAGE_CODE));
         assertThat(readFromJsonMvcResult(result, ErrorInfo.class)).isEqualToComparingFieldByField(expectedErrorInfo);
     }
 
@@ -123,7 +126,8 @@ class ProfileRestControllerTest extends AbstractControllerTest {
                 .andExpect(status().isUnprocessableEntity())
                 .andReturn();
 
-        ErrorInfo expectedErrorInfo = new ErrorInfo("http://localhost" + REST_URL, ErrorType.VALIDATION_ERROR, DUPLICATE_EMAIL_ERROR_MESSAGE);
+        ErrorInfo expectedErrorInfo = new ErrorInfo("http://localhost" + REST_URL,
+                ErrorType.VALIDATION_ERROR, List.of(DUPLICATE_EMAIL_MESSAGE_CODE));
         assertThat(readFromJsonMvcResult(result, ErrorInfo.class)).isEqualToComparingFieldByField(expectedErrorInfo);
     }
 }

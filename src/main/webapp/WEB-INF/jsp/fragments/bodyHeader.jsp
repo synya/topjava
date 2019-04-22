@@ -15,11 +15,13 @@
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle my-2" href="#" id="language" data-toggle="dropdown"
-                       aria-haspopup="true" aria-expanded="false">Language</a>
+                       aria-haspopup="true" aria-expanded="false">${pageContext.response.locale}</a>
                     <div class="dropdown-menu" aria-labelledby="language">
-<%--                        https://stackoverflow.com/questions/9711896/how-to-get-correct-current-url-in-jsp-in-spring-webapp--%>
-                        <a class="dropdown-item" href="${requestScope['javax.servlet.forward.request_uri']}?language=en">English</a>
-                        <a class="dropdown-item" href="${requestScope['javax.servlet.forward.request_uri']}?language=ru">Руссккий</a>
+                        <%--                        https://stackoverflow.com/questions/9711896/how-to-get-correct-current-url-in-jsp-in-spring-webapp--%>
+                        <a class="dropdown-item"
+                           href="${requestScope['javax.servlet.forward.request_uri']}?language=en">English</a>
+                        <a class="dropdown-item"
+                           href="${requestScope['javax.servlet.forward.request_uri']}?language=ru">Руссккий</a>
                     </div>
                 </li>
                 <li class="nav-item">

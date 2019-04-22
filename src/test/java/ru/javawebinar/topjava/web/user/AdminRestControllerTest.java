@@ -14,6 +14,7 @@ import ru.javawebinar.topjava.web.AbstractControllerTest;
 import ru.javawebinar.topjava.web.json.JsonUtil;
 
 import java.util.Collections;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -22,8 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.javawebinar.topjava.TestUtil.*;
 import static ru.javawebinar.topjava.UserTestData.*;
-import static ru.javawebinar.topjava.web.ExceptionInfoHandler.DUPLICATE_EMAIL_ERROR_MESSAGE;
-import static ru.javawebinar.topjava.web.user.ProfileRestController.REST_URL;
+import static ru.javawebinar.topjava.web.ExceptionInfoHandler.DUPLICATE_EMAIL_MESSAGE_CODE;
 
 class AdminRestControllerTest extends AbstractControllerTest {
 
@@ -121,10 +121,11 @@ class AdminRestControllerTest extends AbstractControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(ADMIN))
                 .content(jsonWithPassword(updated, updated.getPassword())))
-                .andExpect(status().isUnprocessableEntity())
+                .andExpect(status().isConflict())
                 .andReturn();
 
-        ErrorInfo expectedErrorInfo = new ErrorInfo("http://localhost" + REST_URL + USER_ID, ErrorType.VALIDATION_ERROR, DUPLICATE_EMAIL_ERROR_MESSAGE);
+        ErrorInfo expectedErrorInfo = new ErrorInfo("http://localhost" + REST_URL + USER_ID,
+                ErrorType.VALIDATION_ERROR, List.of(getLocalizedMessage(DUPLICATE_EMAIL_MESSAGE_CODE)));
         assertThat(readFromJsonMvcResult(result, ErrorInfo.class)).isEqualToComparingFieldByField(expectedErrorInfo);
     }
 
@@ -162,10 +163,11 @@ class AdminRestControllerTest extends AbstractControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(ADMIN))
                 .content(jsonWithPassword(created, created.getPassword())))
-                .andExpect(status().isUnprocessableEntity())
+                .andExpect(status().isConflict())
                 .andReturn();
 
-        ErrorInfo expectedErrorInfo = new ErrorInfo("http://localhost" + REST_URL, ErrorType.VALIDATION_ERROR, DUPLICATE_EMAIL_ERROR_MESSAGE);
+        ErrorInfo expectedErrorInfo = new ErrorInfo("http://localhost" + REST_URL,
+                ErrorType.VALIDATION_ERROR, List.of(getLocalizedMessage(DUPLICATE_EMAIL_MESSAGE_CODE)));
         assertThat(readFromJsonMvcResult(result, ErrorInfo.class)).isEqualToComparingFieldByField(expectedErrorInfo);
     }
 

@@ -14,7 +14,7 @@ import ru.javawebinar.topjava.util.exception.IllegalRequestDataException;
 import javax.validation.Valid;
 import java.net.URI;
 
-import static ru.javawebinar.topjava.web.ExceptionInfoHandler.DUPLICATE_EMAIL_ERROR_MESSAGE;
+import static ru.javawebinar.topjava.web.ExceptionInfoHandler.DUPLICATE_EMAIL_MESSAGE_CODE;
 import static ru.javawebinar.topjava.web.SecurityUtil.authUserId;
 
 @RestController
@@ -40,7 +40,7 @@ public class ProfileRestController extends AbstractUserController {
         try {
             created = super.create(UserUtil.createNewFromTo(userTo));
         } catch (DataIntegrityViolationException e) {
-            throw new IllegalRequestDataException(DUPLICATE_EMAIL_ERROR_MESSAGE);
+            throw new IllegalRequestDataException(DUPLICATE_EMAIL_MESSAGE_CODE);
         }
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
@@ -55,7 +55,7 @@ public class ProfileRestController extends AbstractUserController {
         try {
             super.update(userTo, authUserId());
         } catch (DataIntegrityViolationException e) {
-            throw new IllegalRequestDataException(DUPLICATE_EMAIL_ERROR_MESSAGE);
+            throw new IllegalRequestDataException(DUPLICATE_EMAIL_MESSAGE_CODE);
         }
     }
 

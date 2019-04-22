@@ -1,19 +1,15 @@
 package ru.javawebinar.topjava.web.meal;
 
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.to.MealTo;
-import ru.javawebinar.topjava.util.exception.IllegalRequestDataException;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
-
-import static ru.javawebinar.topjava.web.ExceptionInfoHandler.DUPLICATE_MEAL_DATE_TIME_ERROR_MESSAGE;
 
 @RestController
 @RequestMapping("/ajax/profile/meals")
@@ -42,12 +38,7 @@ public class MealUIController extends AbstractMealController {
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void createOrUpdate(@Valid Meal meal) {
         if (meal.isNew()) {
-            try {
-                super.create(meal);
-            } catch (DataIntegrityViolationException e) {
-                throw new IllegalRequestDataException(DUPLICATE_MEAL_DATE_TIME_ERROR_MESSAGE);
-            }
-
+            super.create(meal);
         } else {
             super.update(meal, meal.getId());
         }

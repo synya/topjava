@@ -3,6 +3,8 @@ package ru.javawebinar.topjava.web;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.test.web.servlet.MockMvc;
@@ -30,7 +32,6 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 abstract public class AbstractControllerTest {
 
     private static final CharacterEncodingFilter CHARACTER_ENCODING_FILTER = new CharacterEncodingFilter();
-
     static {
         CHARACTER_ENCODING_FILTER.setEncoding("UTF-8");
         CHARACTER_ENCODING_FILTER.setForceEncoding(true);
@@ -39,16 +40,23 @@ abstract public class AbstractControllerTest {
     protected MockMvc mockMvc;
 
     @Autowired
+    protected UserService userService;
+
+    @Autowired
     private CacheManager cacheManager;
 
     @Autowired(required = false)
     private JpaUtil jpaUtil;
 
     @Autowired
-    protected UserService userService;
+    private WebApplicationContext webApplicationContext;
 
     @Autowired
-    private WebApplicationContext webApplicationContext;
+    private MessageSource messageSource;
+
+    protected String getLocalizedMessage(String messageCode) {
+        return messageSource.getMessage(messageCode, null, LocaleContextHolder.getLocale());
+    }
 
     @PostConstruct
     private void postConstruct() {

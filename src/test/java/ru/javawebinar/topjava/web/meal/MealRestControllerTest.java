@@ -15,6 +15,8 @@ import ru.javawebinar.topjava.util.exception.ErrorType;
 import ru.javawebinar.topjava.web.AbstractControllerTest;
 import ru.javawebinar.topjava.web.json.JsonUtil;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -28,7 +30,7 @@ import static ru.javawebinar.topjava.UserTestData.*;
 import static ru.javawebinar.topjava.model.AbstractBaseEntity.START_SEQ;
 import static ru.javawebinar.topjava.util.MealsUtil.createWithExcess;
 import static ru.javawebinar.topjava.util.MealsUtil.getWithExcess;
-import static ru.javawebinar.topjava.web.ExceptionInfoHandler.DUPLICATE_MEAL_DATE_TIME_ERROR_MESSAGE;
+import static ru.javawebinar.topjava.web.ExceptionInfoHandler.DUPLICATE_MEAL_MESSAGE_CODE;
 
 class MealRestControllerTest extends AbstractControllerTest {
 
@@ -104,6 +106,23 @@ class MealRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @Transactional(propagation = Propagation.NEVER)
+    void testUpdateDuplicateDateTime() throws Exception {
+        Meal updated = new Meal(MEAL1_ID, MEAL2.getDateTime(), "Обновленный завтрак", 200);
+
+        MvcResult result = mockMvc.perform(put(REST_URL + MEAL1_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(updated))
+                .with(userHttpBasic(USER)))
+                .andExpect(status().isConflict())
+                .andReturn();
+
+        ErrorInfo expectedErrorInfo = new ErrorInfo("http://localhost" + REST_URL + MEAL1_ID,
+                ErrorType.VALIDATION_ERROR, List.of(getLocalizedMessage(DUPLICATE_MEAL_MESSAGE_CODE)));
+        assertThat(readFromJsonMvcResult(result, ErrorInfo.class)).isEqualToComparingFieldByField(expectedErrorInfo);
+    }
+
+    @Test
     void testCreate() throws Exception {
         Meal created = getCreated();
         ResultActions action = mockMvc.perform(post(REST_URL)
@@ -141,10 +160,11 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(created))
                 .with(userHttpBasic(USER)))
-                .andExpect(status().isUnprocessableEntity())
+                .andExpect(status().isConflict())
                 .andReturn();
 
-        ErrorInfo expectedErrorInfo = new ErrorInfo("http://localhost" + REST_URL, ErrorType.VALIDATION_ERROR, DUPLICATE_MEAL_DATE_TIME_ERROR_MESSAGE);
+        ErrorInfo expectedErrorInfo = new ErrorInfo("http://localhost" + REST_URL,
+                ErrorType.VALIDATION_ERROR, List.of(getLocalizedMessage(DUPLICATE_MEAL_MESSAGE_CODE)));
         assertThat(readFromJsonMvcResult(result, ErrorInfo.class)).isEqualToComparingFieldByField(expectedErrorInfo);
     }
 

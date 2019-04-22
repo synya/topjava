@@ -1,18 +1,14 @@
 package ru.javawebinar.topjava.web.user;
 
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.to.UserTo;
 import ru.javawebinar.topjava.util.UserUtil;
-import ru.javawebinar.topjava.util.exception.IllegalRequestDataException;
 
 import javax.validation.Valid;
 import java.util.List;
-
-import static ru.javawebinar.topjava.web.ExceptionInfoHandler.DUPLICATE_EMAIL_ERROR_MESSAGE;
 
 @RestController
 @RequestMapping("/ajax/admin/users")
@@ -39,14 +35,10 @@ public class AdminUIController extends AbstractUserController {
 
     @PostMapping
     public void createOrUpdate(@Valid UserTo userTo) {
-        try {
-            if (userTo.isNew()) {
-                super.create(UserUtil.createNewFromTo(userTo));
-            } else {
-                super.update(userTo, userTo.getId());
-            }
-        } catch (DataIntegrityViolationException e) {
-            throw new IllegalRequestDataException(DUPLICATE_EMAIL_ERROR_MESSAGE);
+        if (userTo.isNew()) {
+            super.create(UserUtil.createNewFromTo(userTo));
+        } else {
+            super.update(userTo, userTo.getId());
         }
     }
 
