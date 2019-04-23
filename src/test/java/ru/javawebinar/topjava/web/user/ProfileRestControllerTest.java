@@ -84,11 +84,11 @@ class ProfileRestControllerTest extends AbstractControllerTest {
 
         MvcResult result = mockMvc.perform(post(REST_URL + "/register").contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(createdTo)))
-                .andExpect(status().isUnprocessableEntity())
+                .andExpect(status().isConflict())
                 .andReturn();
 
         ErrorInfo expectedErrorInfo = new ErrorInfo("http://localhost" + REST_URL + "/register",
-                ErrorType.VALIDATION_ERROR, List.of(DUPLICATE_EMAIL_MESSAGE_CODE));
+                ErrorType.VALIDATION_ERROR, List.of(getLocalizedMessage(DUPLICATE_EMAIL_MESSAGE_CODE)));
         assertThat(readFromJsonMvcResult(result, ErrorInfo.class)).isEqualToComparingFieldByField(expectedErrorInfo);
     }
 
@@ -123,11 +123,11 @@ class ProfileRestControllerTest extends AbstractControllerTest {
         MvcResult result = mockMvc.perform(put(REST_URL).contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(USER))
                 .content(JsonUtil.writeValue(updatedTo)))
-                .andExpect(status().isUnprocessableEntity())
+                .andExpect(status().isConflict())
                 .andReturn();
 
         ErrorInfo expectedErrorInfo = new ErrorInfo("http://localhost" + REST_URL,
-                ErrorType.VALIDATION_ERROR, List.of(DUPLICATE_EMAIL_MESSAGE_CODE));
+                ErrorType.VALIDATION_ERROR, List.of(getLocalizedMessage(DUPLICATE_EMAIL_MESSAGE_CODE)));
         assertThat(readFromJsonMvcResult(result, ErrorInfo.class)).isEqualToComparingFieldByField(expectedErrorInfo);
     }
 }

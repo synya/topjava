@@ -1,6 +1,5 @@
 package ru.javawebinar.topjava.web.user;
 
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -9,12 +8,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.to.UserTo;
 import ru.javawebinar.topjava.util.UserUtil;
-import ru.javawebinar.topjava.util.exception.IllegalRequestDataException;
 
 import javax.validation.Valid;
 import java.net.URI;
 
-import static ru.javawebinar.topjava.web.ExceptionInfoHandler.DUPLICATE_EMAIL_MESSAGE_CODE;
 import static ru.javawebinar.topjava.web.SecurityUtil.authUserId;
 
 @RestController
@@ -36,12 +33,7 @@ public class ProfileRestController extends AbstractUserController {
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.CREATED)
     public ResponseEntity<User> register(@Valid @RequestBody UserTo userTo) {
-        User created;
-        try {
-            created = super.create(UserUtil.createNewFromTo(userTo));
-        } catch (DataIntegrityViolationException e) {
-            throw new IllegalRequestDataException(DUPLICATE_EMAIL_MESSAGE_CODE);
-        }
+        User created = super.create(UserUtil.createNewFromTo(userTo));
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
                 .buildAndExpand(created.getId()).toUri();
@@ -52,11 +44,7 @@ public class ProfileRestController extends AbstractUserController {
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@Valid @RequestBody UserTo userTo) {
-        try {
-            super.update(userTo, authUserId());
-        } catch (DataIntegrityViolationException e) {
-            throw new IllegalRequestDataException(DUPLICATE_EMAIL_MESSAGE_CODE);
-        }
+        super.update(userTo, authUserId());
     }
 
     @GetMapping(value = "/text")
